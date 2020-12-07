@@ -88,7 +88,7 @@
             dest: "{{ system_home }}/.bazaar",
           }
     - name: setup encrypted seafile sync folders
-      command: /usr/bin/seaf-cli sync -l "{{ item.src }}" -s "{{ seaf_server }}" -d "{{ item.dest }}" -u "{{ seaf_id}}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+      command: /usr/bin/seaf-cli sync -l "{{ item.src }}" -s "{{ seaf_server }}" -d "{{ item.dest }}" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
       with_items:
         - {
             src: "a24baa32-c955-4609-9ab1-060146664782",
@@ -142,6 +142,16 @@
         name: user.email
         scope: global
         value: "{{ my_email }}"
+    - name: set git config - gpg signing key
+      git_config:
+        name: user.signingkey
+        scope: global
+        value: 13A72DEF6C9670B7
+    - name: set git config - always sign gpg
+      git_config:
+        name: commit.gpgsign
+        scope: global
+        value: true
     - name: allow ssh in ufw
       become: yes
       ufw:
