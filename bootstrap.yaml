@@ -1,0 +1,131 @@
+- name: bootstrap base system for automation
+  hosts: localhost
+  become: no
+  vars_files:
+    - secrets.yaml
+  pre_tasks:
+    - name: update repositories
+      become: yes
+      apt: update_cache=yes
+      changed_when: false 
+  tasks:
+    - name: install apt packages
+      become: yes
+      apt:
+        pkg:
+          - seafile-cli
+          - openssh-server
+          - git
+          - ansible
+          - gpg
+        state: present
+    - name: setup seafile folders if they do not exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0750'
+        owner: "{{ system_user }}"
+        group: "{{ system_user }}"
+      with_items:
+        - "{{ system_home }}/.aws"
+        - "{{ system_home }}/.password-store"
+        - "{{ system_home }}/.restic"
+        - "{{ system_home }}/.themes"
+        - "{{ system_home }}/.config/espanso"
+        - "{{ system_home }}/tmp/bs"
+        - "{{ system_home }}/.icons"
+        - "{{ system_home }}/.fonts"
+        - "{{ system_home }}/.ssh"
+        - "{{ system_home }}/.gnupg"
+        - "{{ system_home }}/Documents"
+        - "{{ system_home }}/Pictures"
+        - "{{ system_home }}/go/src/github.com/{{ my_github_username }}"
+        - "{{ system_home }}/Videos"
+        - "{{ system_home }}/Desktop"
+        - "{{ system_home }}/.bazaar"
+        - "{{ system_home }}/seafile-client"
+    - name: init seafile
+      command: /usr/bin/seaf-cli init -d "{{ system_home }}/seafile-client"
+    - name: start seafile
+      command: /usr/bin/seaf-cli start
+    - name: setup seafile sync folders
+      command: /usr/bin/seaf-cli sync -l "{{ item.src }}" -s "{{ seaf_server }}" -d "{{ item.dest }}" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+      with_items:
+        - { src: "d8963e8b-f8ca-4c5c-b110-f51f9455f3a5", dest: "{{ system_home }}/.themes" }
+        - { src: "7327b0e1-3503-4a4b-9413-de0bc716e8f4", dest: "{{ system_home }}/.icons" }
+        - { src: "13f43ccf-e29f-481c-9b67-b8374c768779", dest: "{{ system_home }}/.fonts" }
+        - { src: "1d95290b-f530-42e5-b9c9-a46cf1b3457e", dest: "{{ system_home }}/Documents" }
+        - { src: "219dab32-2852-4aa2-acf8-ddfbedd5c75d", dest: "{{ system_home }}/Pictures" }
+        - { src: "5fe768a9-aea1-4319-b16c-f5d8ebcc4af7", dest: "{{ system_home }}/go/src/github.com/{{ my_github_username }}" }
+        - { src: "3ef2c458-3095-449a-8ce5-b506dd5f7b29", dest: "{{ system_home }}/Videos" }
+        - { src: "104ec990-e8b8-4bab-9500-08cd95571a97", dest: "{{ system_home }}/Desktop" }
+        - { src: "fd4a9be7-a4cc-4a96-9b7d-6d0ebff8dae3", dest: "{{ system_home }}/.bazaar" }
+    - name: setup encrypted seafile sync folders
+      command: /usr/bin/seaf-cli sync -l "{{ item.src }}" -s "{{ seaf_server }}" -d "{{ item.dest }}" -u "{{ seaf_id}}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+      with_items:
+        - { src: "a24baa32-c955-4609-9ab1-060146664782", dest: "{{ system_home }}/.aws" }
+        - { src: "3a89ee87-1d93-4cfa-9c1e-ba515cf75f67", dest: "{{ system_home }}/.password-store" }
+        - { src: "922c8769-5a34-46fa-bbc8-1ba85f134a2d", dest: "{{ system_home }}/.restic" }
+        - { src: "bc46a615-1545-403d-8791-cb08b397b4bf", dest: "{{ system_home }}/.config/espanso" }
+        - { src: "3d8b3bee-6bf6-40b2-aaaa-4d4183791f41", dest: "{{ system_home }}/tmp/bs" }
+        - { src: "478b76d6-9733-4790-864f-b4921ab059ad", dest: "{{ system_home }}/.ssh" }
+        - { src: "f453bce7-f3f5-4269-8382-4fe7a17a1316", dest: "{{ system_home }}/.gnupg" }
+    - name: adding system user
+      become: yes
+      user:
+        name: "{{ system_user }}"
+        comment: "{{ my_fullname }}"
+        groups: sudo, adm, cdrom, dip, plugdev, lpadmin, sambashare, lxd, audio
+        append: yes
+    - name: Install GH SSH Pub keys
+      authorized_key:
+        user: "{{ system_user }}"
+        state: present
+        key: "https://github.com/{{ item }}.keys"
+      with_items:
+        - "{{ my_github_username }}"
+    - name: set git config - name
+      git_config:
+        name: user.name
+        scope: global
+        value: "{{ my_github_username }}"
+    - name: set git config - email
+      git_config:
+        name: user.email
+        scope: global
+        value: "{{ my_email }}"
+    - name: allow ssh in ufw
+      become: yes
+      ufw:
+        rule: allow
+        name: OpenSSH
+    - name: enable and start system scoped services
+      become: yes
+      systemd:
+        enabled: yes
+        state: started
+        name: "{{ item }}"
+      with_items:
+          - ssh
+          - ufw
+    - name: set timezone to America/Vancouver
+      timezone:
+        name: "{{ my_timezone }}"
+    - name: fix SSH dir permissions"
+      file:
+        path: "{{ system_home }}/.ssh"
+        state: directory
+        mode: '0700'
+        owner: "{{ system_user }}"
+        group: "{{ system_user }}"
+    - name: fix SSH key permissions"
+      file:
+        path: "{{ items }}"
+        state: file
+        mode: '0600'
+        owner: "{{ system_user }}"
+        group: "{{ system_user }}"
+      with_items:
+        - "{{ system_home }}/.ssh/id_rsa"
+        - "{{ system_home }}/.ssh/id_rsa.pub"
+        
