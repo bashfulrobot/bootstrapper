@@ -94,7 +94,7 @@
         - {
             src: "a4cb6bc4-122b-4c90-bf0f-a706ef28dce3",
             dest: "{{ system_home }}/.config/microsoft-edge-dev"
-          },
+          }
         - {
             src: "a24baa32-c955-4609-9ab1-060146664782",
             dest: "{{ system_home }}/.aws",
