@@ -3,12 +3,11 @@
 # # # # # CONFIG
 
 # binaries
-WHICH="/usr/bin/which"
-SUDO="$($WHICH sudo)"
-APT="$($WHICH apt)"
-GIT="$($WHICH git)"
-AV="$($WHICH ansible-playbook)"
-RM="$($WHICH rm)"
+SUDO="$(which sudo)"
+APT="$(which apt)"
+GIT="$(which git)"
+AV="$(which ansible-playbook)"
+RM="$(which rm)"
 
 # locations
 WORKING="/tmp"
