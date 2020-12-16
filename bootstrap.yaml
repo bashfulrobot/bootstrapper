@@ -199,7 +199,7 @@
         - ufw
     - name: set timezone to America/Vancouver
       timezone:
-        name: "{{ my_timezone }}"
+        name: America/Vancouver
     - name: fix SSH key permissions"
       file:
         path: "{{ items }}"
