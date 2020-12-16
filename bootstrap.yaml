@@ -200,7 +200,7 @@
     - name: set timezone to America/Vancouver
       timezone:
         name: America/Vancouver
-    - name: fix SSH key permissions"
+    - name: fix SSH key permissions
       file:
         path: "{{ items }}"
         state: file
