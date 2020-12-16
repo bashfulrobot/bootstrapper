@@ -202,7 +202,7 @@
         name: America/Vancouver
     - name: fix SSH key permissions
       file:
-        path: "{{ items }}"
+        path: "{{ item }}"
         state: file
         mode: "0700"
         owner: "{{ system_user }}"
