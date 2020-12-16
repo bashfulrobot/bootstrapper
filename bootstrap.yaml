@@ -98,7 +98,7 @@
     - name: setup desktop sync
       shell: |
         /usr/bin/seaf-cli sync -l "104ec990-e8b8-4bab-9500-08cd95571a97" -s "{{ seaf_server }}" -d "{{ system_home }}/Desktop" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touvh "{{ system_home }}/.config/ansible-automation/seaf-cli-desktop"
+        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-desktop"
       args:
         creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-desktop"
     - name: setup bazaar sync
@@ -146,7 +146,7 @@
     - name: setup gnupg sync
       shell: |
         /usr/bin/seaf-cli sync -l "f453bce7-f3f5-4269-8382-4fe7a17a1316" -s "{{ seaf_server }}" -d "{{ system_home }}/.gnupg" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-gnupg
+        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-gnupg"
       args:
         creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-gnupg"
     - name: adding system user
