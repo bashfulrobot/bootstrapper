@@ -6,7 +6,7 @@
 SUDO="$(which sudo)"
 APT="$(which apt)"
 GIT="$(which git)"
-AV="$(which ansible-playbook)"
+AP="$(which ansible-playbook)"
 RM="$(which rm)"
 
 # locations
@@ -25,7 +25,7 @@ ${GIT} clone ${REPO_URL}
 cd ${REPO}
 
 # run the bootstrap
-${AV} --ask-vault-pass bootstrap.yaml
+${AP} --ask-vault-pass bootstrap.yaml
 
 # cleanup
 cd
