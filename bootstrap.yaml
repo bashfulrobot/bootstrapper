@@ -19,6 +19,26 @@
           - ansible
           - gpg
         state: present
+    - name: configure git - user email
+      git_config:
+        name: user.email
+        scope: global
+        value: dustin@bashfulrobot.com
+    - name: configure git - name
+      git_config:
+        name: user.name
+        scope: global
+        value: Dustin Krysak
+    - name: configure git - username
+      git_config:
+        name: user.username
+        scope: global
+        value: bashfulrobot
+    - name: configure git - user signing key
+      git_config:
+        name: user.signingKey
+        scope: global
+        value: 64EA7EA1E11512164668E22913A72DEF6C9670B7
     - name: setup seafile folders if they do not exist
       file:
         path: "{{ item }}"
