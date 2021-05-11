@@ -41,7 +41,7 @@
         value: 64EA7EA1E11512164668E22913A72DEF6C9670B7
     - name: Placing seafile autostart
       copy:
-        src: files/cfg/home/.config/autostart/seaf-cli.desktop
+        src: files/home/.config/autostart/seaf-cli.desktop
         dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
         owner: "{{ system_user }}"
         group: "{{ system_user }}"
@@ -239,10 +239,3 @@
         - "{{ system_home }}/.ssh/id_rsa.pub"
         - "{{ system_home }}/.ssh/service_terraform"
         - "{{ system_home }}/.ssh/service_terraform.pub"
-    - name: Placing seafile autostart
-      copy:
-        src: files/home/.config/autostart/seaf-cli.desktop
-        dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
-        owner: "{{ system_user }}"
-        group: "{{ system_user }}"
-        mode: 0644
