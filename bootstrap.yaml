@@ -241,7 +241,7 @@
         - "{{ system_home }}/.ssh/service_terraform.pub"
     - name: Placing seafile autostart
       copy:
-        src: files/cfg/home/.config/autostart/seaf-cli.desktop
+        src: files/home/.config/autostart/seaf-cli.desktop/seaf-cli.desktop
         dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
         owner: "{{ system_user }}"
         group: "{{ system_user }}"
