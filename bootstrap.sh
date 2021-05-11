@@ -10,6 +10,7 @@ AP="$(which ansible-playbook)"
 RM="$(which rm)"
 
 # locations
+#WORKING="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 WORKING="/tmp"
 REPO="${WORKING}/bootstrapper"
 REPO_URL="https://github.com/bashfulrobot/bootstrapper.git"
@@ -26,7 +27,6 @@ cd ${REPO}
 
 # run the bootstrap
 ${AP} --ask-vault-pass bootstrap.yaml
-
 # cleanup
 cd
 ${RM} -rf ${REPO}

@@ -39,6 +39,13 @@
         name: user.signingKey
         scope: global
         value: 64EA7EA1E11512164668E22913A72DEF6C9670B7
+    - name: Placing seafile autostart
+      copy:
+        src: files/cfg/home/.config/autostart/seaf-cli.desktop
+        dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
+        owner: "{{ system_user }}"
+        group: "{{ system_user }}"
+        mode: 0644
     - name: setup seafile folders if they do not exist
       file:
         path: "{{ item }}"
@@ -224,9 +231,18 @@
       file:
         path: "{{ item }}"
         state: file
-        mode: "0700"
+        mode: "0600"
         owner: "{{ system_user }}"
         group: "{{ system_user }}"
       with_items:
         - "{{ system_home }}/.ssh/id_rsa"
         - "{{ system_home }}/.ssh/id_rsa.pub"
+        - "{{ system_home }}/.ssh/service_terraform"
+        - "{{ system_home }}/.ssh/service_terraform.pub"
+    - name: Placing seafile autostart
+      copy:
+        src: files/cfg/home/.config/autostart/seaf-cli.desktop
+        dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
+        owner: "{{ system_user }}"
+        group: "{{ system_user }}"
+        mode: 0644
