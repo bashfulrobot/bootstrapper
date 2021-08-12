@@ -58,6 +58,7 @@
         - "{{ system_home }}/.password-store"
         - "{{ system_home }}/.restic"
         - "{{ system_home }}/.themes"
+        - "{{ system_home }}/.config/autostart"
         - "{{ system_home }}/.config/espanso"
         - "{{ system_home }}/.config/ansible-automation"
         - "{{ system_home }}/tmp/bs"
