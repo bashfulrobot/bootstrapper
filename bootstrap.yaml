@@ -56,6 +56,7 @@
         group: "{{ system_user }}"
       with_items:
         - "{{ system_home }}/.aws"
+        - "{{ system_home }}/.local/share/cod"
         - "{{ system_home }}/.password-store"
         - "{{ system_home }}/.restic"
         - "{{ system_home }}/.themes"
@@ -145,6 +146,13 @@
     - name: setup password-store sync
       shell: |
         /usr/bin/seaf-cli sync -l "3a89ee87-1d93-4cfa-9c1e-ba515cf75f67" -s "{{ seaf_server }}" -d "{{ system_home }}/.password-store" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-password-store"
+      args:
+        creates: "{{ system_home
+        }}/.config/ansible-automation/seaf-cli-password-store"
+    - name: setup cod sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "9edd2abf-9a27-4828-b39c-e0e25e54e98d" -s "{{ seaf_server }}" -d "{{ system_home }}/.local/share/cod" -u "{{ seaf_id }}" -p "{{ seaf_pass }}"
         touch "{{ system_home }}/.config/ansible-automation/seaf-cli-password-store"
       args:
         creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-password-store"
