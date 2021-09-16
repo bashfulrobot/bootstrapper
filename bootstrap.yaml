@@ -40,13 +40,6 @@
         name: user.signingKey
         scope: global
         value: 64EA7EA1E11512164668E22913A72DEF6C9670B7
-    - name: Placing seafile autostart
-      copy:
-        src: files/home/.config/autostart/seaf-cli.desktop
-        dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
-        owner: "{{ system_user }}"
-        group: "{{ system_user }}"
-        mode: 0644
     - name: setup seafile folders if they do not exist
       file:
         path: "{{ item }}"
@@ -75,6 +68,14 @@
         - "{{ system_home }}/Desktop"
         - "{{ system_home }}/.bazaar"
         - "{{ system_home }}/seafile-client"
+        - "{{ system_home }}/.config/autostart"
+    - name: Placing seafile autostart
+      copy:
+        src: files/home/.config/autostart/seaf-cli.desktop
+        dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
+        owner: "{{ system_user }}"
+        group: "{{ system_user }}"
+        mode: 0644
     - name: init seafile
       shell: |
         /usr/bin/seaf-cli init -d "{{ system_home }}/seafile-client"; touch "{{ system_home }}/.config/ansible-automation/seaf-cli-init"
