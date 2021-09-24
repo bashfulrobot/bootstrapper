@@ -74,7 +74,7 @@
         - "/home/{{ lookup('env','USER') }}/.bazaar"
         - "/home/{{ lookup('env','USER') }}/seafile-client"
         - "/home/{{ lookup('env','USER') }}/.config/autostart"
-    - name: Placing seafile autostart
+    - name: placing seafile autostart
       copy:
         src: files/home/.config/autostart/seaf-cli.desktop
         dest: "/home/{{ lookup('env','USER') }}/.config/autostart/seaf-cli.desktop"
@@ -198,7 +198,7 @@
         comment: "{{ my_fullname }}"
         groups: sudo, adm, cdrom, dip, plugdev, lpadmin, sambashare, lxd, audio
         append: yes
-    - name: Install GH SSH Pub keys
+    - name: install gh ssh pub keys
       authorized_key:
         user: "{{ lookup('env','USER') }}"
         state: present
@@ -219,10 +219,10 @@
       with_items:
         - ssh
         - ufw
-    - name: set timezone to America/Vancouver
+    - name: set timezone to america/vancouver
       timezone:
         name: America/Vancouver
-    - name: fix SSH key permissions
+    - name: fix ssh key permissions
       file:
         path: "{{ item }}"
         state: file
