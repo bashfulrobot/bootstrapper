@@ -24,22 +24,22 @@
       git_config:
         name: user.email
         scope: global
-        value: { { my_email } }
+        value: "{{ my_email }}"
     - name: configure git - name
       git_config:
         name: user.name
         scope: global
-        value: { { my_fullname } }
+        value: "{{ my_fullname }}"
     - name: configure git - username
       git_config:
         name: user.username
         scope: global
-        value: { { my_github_username } }
+        value: "{{ my_github_username }}"
     - name: configure git - user signing key
       git_config:
         name: user.signingKey
         scope: global
-        value: { { my_git_signkey } }
+        value: "{{ my_git_signkey }}"
     - name: set git config - always sign gpg
       git_config:
         name: commit.gpgsign
@@ -83,7 +83,7 @@
         mode: 0644
     - name: init seafile
       shell: |
-        /usr/bin/seaf-cli init -d "/home/{{ lookup('env','USER') }}/seafile-client
+        /usr/bin/seaf-cli init -d "/home/{{ lookup('env','USER') }}/seafile-client"
         touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-init"
       args:
         creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-init"
