@@ -24,203 +24,187 @@
       git_config:
         name: user.email
         scope: global
-        value: dustin@bashfulrobot.com
+        value: { { my_email } }
     - name: configure git - name
       git_config:
         name: user.name
         scope: global
-        value: Dustin Krysak
+        value: { { my_fullname } }
     - name: configure git - username
       git_config:
         name: user.username
         scope: global
-        value: bashfulrobot
+        value: { { my_github_username } }
     - name: configure git - user signing key
       git_config:
         name: user.signingKey
         scope: global
-        value: 64EA7EA1E11512164668E22913A72DEF6C9670B7
-    - name: setup seafile folders if they do not exist
-      file:
-        path: "{{ item }}"
-        state: directory
-        mode: "0700"
-        owner: "{{ system_user }}"
-        group: "{{ system_user }}"
-      with_items:
-        - "{{ system_home }}/.aws"
-        - "{{ system_home }}/.local/share/cod"
-        - "{{ system_home }}/.password-store"
-        - "{{ system_home }}/.restic"
-        - "{{ system_home }}/.themes"
-        - "{{ system_home }}/.config/autostart"
-        - "{{ system_home }}/.config/espanso"
-        - "{{ system_home }}/.config/ansible-automation"
-        - "{{ system_home }}/tmp/bs"
-        - "{{ system_home }}/.icons"
-        - "{{ system_home }}/.fonts"
-        - "{{ system_home }}/.ssh"
-        - "{{ system_home }}/.gnupg"
-        - "{{ system_home }}/Documents"
-        - "{{ system_home }}/Pictures"
-        - "{{ system_home }}/go/src/github.com/{{ my_github_username }}"
-        - "{{ system_home }}/Videos"
-        - "{{ system_home }}/Desktop"
-        - "{{ system_home }}/.bazaar"
-        - "{{ system_home }}/seafile-client"
-        - "{{ system_home }}/.config/autostart"
-    - name: Placing seafile autostart
-      copy:
-        src: files/home/.config/autostart/seaf-cli.desktop
-        dest: "/home/{{ system_user }}/.config/autostart/seaf-cli.desktop"
-        owner: "{{ system_user }}"
-        group: "{{ system_user }}"
-        mode: 0644
-    - name: init seafile
-      shell: |
-        /usr/bin/seaf-cli init -d "{{ system_home }}/seafile-client"; touch "{{ system_home }}/.config/ansible-automation/seaf-cli-init"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-init"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-init"
-    - name: start seafile
-      command: /usr/bin/seaf-cli start
-    - name: setup theme sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "d8963e8b-f8ca-4c5c-b110-f51f9455f3a5" -s "{{ seaf_server }}" -d "{{ system_home }}/.themes" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-themes"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-themes"
-    - name: setup icons sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "7327b0e1-3503-4a4b-9413-de0bc716e8f4" -s "{{ seaf_server }}" -d "{{ system_home }}/.icons" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-icons"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-icons"
-    - name: setup fonts sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "13f43ccf-e29f-481c-9b67-b8374c768779" -s "{{ seaf_server }}" -d "{{ system_home }}/.fonts" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-fonts"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-fonts"
-    - name: setup documents sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "1d95290b-f530-42e5-b9c9-a46cf1b3457e" -s "{{ seaf_server }}" -d "{{ system_home }}/Documents" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-documents"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-documents"
-    - name: setup pictures sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "219dab32-2852-4aa2-acf8-ddfbedd5c75d" -s "{{ seaf_server }}" -d "{{ system_home }}/Pictures" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-pictures"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-pictures"
-    - name: setup go project sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "5fe768a9-aea1-4319-b16c-f5d8ebcc4af7" -s "{{ seaf_server }}" -d "{{ system_home }}/go/src/github.com/{{ my_github_username }}" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-go-proj"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-go-proj"
-    - name: setup videos sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "3ef2c458-3095-449a-8ce5-b506dd5f7b29" -s "{{ seaf_server }}" -d "{{ system_home }}/Videos" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-videos"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-videos"
-    - name: setup desktop sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "104ec990-e8b8-4bab-9500-08cd95571a97" -s "{{ seaf_server }}" -d "{{ system_home }}/Desktop" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-desktop"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-desktop"
-    - name: setup bazaar sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "fd4a9be7-a4cc-4a96-9b7d-6d0ebff8dae3" -s "{{ seaf_server }}" -d "{{ system_home }}/.bazaar" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-bazaar"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-bazaar"
-    - name: setup aws sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "a24baa32-c955-4609-9ab1-060146664782" -s "{{ seaf_server }}" -d "{{ system_home }}/.aws" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-aw"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-aws"
-    - name: setup password-store sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "3a89ee87-1d93-4cfa-9c1e-ba515cf75f67" -s "{{ seaf_server }}" -d "{{ system_home }}/.password-store" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-password-store"
-      args:
-        creates: "{{ system_home
-        }}/.config/ansible-automation/seaf-cli-password-store"
-    - name: setup cod sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "9edd2abf-9a27-4828-b39c-e0e25e54e98d" -s "{{ seaf_server }}" -d "{{ system_home }}/.local/share/cod" -u "{{ seaf_id }}" -p "{{ seaf_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-password-store"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-password-store"
-    - name: setup restic sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "922c8769-5a34-46fa-bbc8-1ba85f134a2d" -s "{{ seaf_server }}" -d "{{ system_home }}/.restic" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-restic"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-restic"
-    - name: setup espanso sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "bc46a615-1545-403d-8791-cb08b397b4bf" -s "{{ seaf_server }}" -d "{{ system_home }}/.config/espanso" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-espanso"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-espanso"
-    - name: setup bs sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "3d8b3bee-6bf6-40b2-aaaa-4d4183791f41" -s "{{ seaf_server }}" -d "{{ system_home }}/tmp/bs" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-bs"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-bs"
-    - name: setup ssh sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "478b76d6-9733-4790-864f-b4921ab059ad" -s "{{ seaf_server }}" -d "{{ system_home }}/.ssh" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-ssh"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-ssh"
-    - name: setup gnupg sync
-      shell: |
-        /usr/bin/seaf-cli sync -l "f453bce7-f3f5-4269-8382-4fe7a17a1316" -s "{{ seaf_server }}" -d "{{ system_home }}/.gnupg" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
-        touch "{{ system_home }}/.config/ansible-automation/seaf-cli-gnupg"
-      args:
-        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-gnupg"
-    - name: adding system user
-      become: yes
-      user:
-        name: "{{ system_user }}"
-        comment: "{{ my_fullname }}"
-        groups: sudo, adm, cdrom, dip, plugdev, lpadmin, sambashare, lxd, audio
-        append: yes
-    - name: Install GH SSH Pub keys
-      authorized_key:
-        user: "{{ system_user }}"
-        state: present
-        key: "https://github.com/{{ item }}.keys"
-      with_items:
-        - "{{ my_github_username }}"
-    - name: set git config - name
-      git_config:
-        name: user.name
-        scope: global
-        value: "{{ my_github_username }}"
-    - name: set git config - email
-      git_config:
-        name: user.email
-        scope: global
-        value: "{{ my_email }}"
-    - name: set git config - gpg signing key
-      git_config:
-        name: user.signingkey
-        scope: global
-        value: 13A72DEF6C9670B7
+        value: { { my_git_signkey } }
     - name: set git config - always sign gpg
       git_config:
         name: commit.gpgsign
         scope: global
         value: true
+    - name: setup seafile folders if they do not exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0700"
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+      with_items:
+        - "/home/{{ lookup('env','USER') }}/.aws"
+        - "/home/{{ lookup('env','USER') }}/.local/share/cod"
+        - "/home/{{ lookup('env','USER') }}/.password-store"
+        - "/home/{{ lookup('env','USER') }}/.restic"
+        - "/home/{{ lookup('env','USER') }}/.themes"
+        - "/home/{{ lookup('env','USER') }}/.config/autostart"
+        - "/home/{{ lookup('env','USER') }}/.config/espanso"
+        - "/home/{{ lookup('env','USER') }}/.config/ansible-automation"
+        - "/home/{{ lookup('env','USER') }}/tmp/bs"
+        - "/home/{{ lookup('env','USER') }}/.icons"
+        - "/home/{{ lookup('env','USER') }}/.fonts"
+        - "/home/{{ lookup('env','USER') }}/.ssh"
+        - "/home/{{ lookup('env','USER') }}/.gnupg"
+        - "/home/{{ lookup('env','USER') }}/Documents"
+        - "/home/{{ lookup('env','USER') }}/Pictures"
+        - "/home/{{ lookup('env','USER') }}/go/src/github.com/{{ my_github_username }}"
+        - "/home/{{ lookup('env','USER') }}/Videos"
+        - "/home/{{ lookup('env','USER') }}/Desktop"
+        - "/home/{{ lookup('env','USER') }}/.bazaar"
+        - "/home/{{ lookup('env','USER') }}/seafile-client"
+        - "/home/{{ lookup('env','USER') }}/.config/autostart"
+    - name: Placing seafile autostart
+      copy:
+        src: files/home/.config/autostart/seaf-cli.desktop
+        dest: "/home/{{ lookup('env','USER') }}/.config/autostart/seaf-cli.desktop"
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+        mode: 0644
+    - name: init seafile
+      shell: |
+        /usr/bin/seaf-cli init -d "/home/{{ lookup('env','USER') }}/seafile-client
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-init"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-init"
+    - name: start seafile
+      command: /usr/bin/seaf-cli start
+    - name: setup theme sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "d8963e8b-f8ca-4c5c-b110-f51f9455f3a5" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.themes" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-themes"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-themes"
+    - name: setup icons sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "7327b0e1-3503-4a4b-9413-de0bc716e8f4" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.icons" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-icons"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-icons"
+    - name: setup fonts sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "13f43ccf-e29f-481c-9b67-b8374c768779" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.fonts" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-fonts"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-fonts"
+    - name: setup documents sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "1d95290b-f530-42e5-b9c9-a46cf1b3457e" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/Documents" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-documents"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-documents"
+    - name: setup pictures sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "219dab32-2852-4aa2-acf8-ddfbedd5c75d" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/Pictures" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-pictures"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-pictures"
+    - name: setup go project sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "5fe768a9-aea1-4319-b16c-f5d8ebcc4af7" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/go/src/github.com/{{ my_github_username }}" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-go-proj"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-go-proj"
+    - name: setup videos sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "3ef2c458-3095-449a-8ce5-b506dd5f7b29" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/Videos" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-videos"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-videos"
+    - name: setup desktop sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "104ec990-e8b8-4bab-9500-08cd95571a97" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/Desktop" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-desktop"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-desktop"
+    - name: setup bazaar sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "fd4a9be7-a4cc-4a96-9b7d-6d0ebff8dae3" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.bazaar" -u "{{ seaf_id}}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-bazaar"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-bazaar"
+    - name: setup aws sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "a24baa32-c955-4609-9ab1-060146664782" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.aws" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-aw"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-aws"
+    - name: setup password-store sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "3a89ee87-1d93-4cfa-9c1e-ba515cf75f67" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.password-store" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-password-store"
+      args:
+        creates: "{{ system_home }}/.config/ansible-automation/seaf-cli-password-store"
+    - name: setup cod sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "9edd2abf-9a27-4828-b39c-e0e25e54e98d" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.local/share/cod" -u "{{ seaf_id }}" -p "{{ seaf_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-password-store"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-password-store"
+    - name: setup restic sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "922c8769-5a34-46fa-bbc8-1ba85f134a2d" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.restic" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-restic"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-restic"
+    - name: setup espanso sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "bc46a615-1545-403d-8791-cb08b397b4bf" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.config/espanso" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-espanso"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-espanso"
+    - name: setup bs sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "3d8b3bee-6bf6-40b2-aaaa-4d4183791f41" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/tmp/bs" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-bs"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-bs"
+    - name: setup ssh sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "478b76d6-9733-4790-864f-b4921ab059ad" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.ssh" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-ssh"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-ssh"
+    - name: setup gnupg sync
+      shell: |
+        /usr/bin/seaf-cli sync -l "f453bce7-f3f5-4269-8382-4fe7a17a1316" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.gnupg" -u "{{ seaf_id }}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
+        touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-gnupg"
+      args:
+        creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-gnupg"
+    - name: adding system user
+      become: yes
+      user:
+        name: "{{ lookup('env','USER') }}"
+        comment: "{{ my_fullname }}"
+        groups: sudo, adm, cdrom, dip, plugdev, lpadmin, sambashare, lxd, audio
+        append: yes
+    - name: Install GH SSH Pub keys
+      authorized_key:
+        user: "{{ lookup('env','USER') }}"
+        state: present
+        key: "https://github.com/{{ item }}.keys"
+      with_items:
+        - "{{ my_github_username }}"
     - name: allow ssh in ufw
       become: yes
       ufw:
@@ -243,10 +227,10 @@
         path: "{{ item }}"
         state: file
         mode: "0600"
-        owner: "{{ system_user }}"
-        group: "{{ system_user }}"
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
       with_items:
-        - "{{ system_home }}/.ssh/id_rsa"
-        - "{{ system_home }}/.ssh/id_rsa.pub"
-        - "{{ system_home }}/.ssh/service_terraform"
-        - "{{ system_home }}/.ssh/service_terraform.pub"
+        - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa"
+        - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa.pub"
+        - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform"
+        - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform.pub"
