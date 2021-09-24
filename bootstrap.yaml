@@ -44,7 +44,7 @@
       git_config:
         name: commit.gpgsign
         scope: global
-        value: true
+        value: "true"
     - name: setup seafile folders if they do not exist
       file:
         path: "{{ item }}"
