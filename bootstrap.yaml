@@ -19,6 +19,7 @@
           - ansible
           - gpg
           - snapd
+	  - make
         state: present
     - name: configure git - user email
       git_config:
