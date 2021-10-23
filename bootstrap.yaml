@@ -196,7 +196,7 @@
       user:
         name: "{{ lookup('env','USER') }}"
         comment: "{{ my_fullname }}"
-        groups: sudo, adm, cdrom, dip, plugdev, lpadmin, sambashare, lxd, audio
+        groups: sudo, adm, cdrom, dip, plugdev, lpadmin, sambashare, audio
         append: yes
     - name: install gh ssh pub keys
       authorized_key:
