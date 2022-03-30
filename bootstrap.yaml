@@ -130,15 +130,15 @@
     - name: set timezone to america/vancouver
       timezone:
         name: America/Vancouver
-    - name: fix ssh key permissions
-      file:
-        path: "{{ item }}"
-        state: file
-        mode: "0600"
-        owner: "{{ lookup('env','USER') }}"
-        group: "{{ lookup('env','USER') }}"
-      with_items:
-        - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa"
-        - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa.pub"
-        - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform"
-        - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform.pub"
+    # - name: fix ssh key permissions
+    #   file:
+    #     path: "{{ item }}"
+    #     state: file
+    #     mode: "0600"
+    #     owner: "{{ lookup('env','USER') }}"
+    #     group: "{{ lookup('env','USER') }}"
+    #   with_items:
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa"
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa.pub"
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform"
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform.pub"
