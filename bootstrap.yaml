@@ -9,25 +9,28 @@
       apt: update_cache=yes
       changed_when: false
   tasks:
-    # - name: Add mega Apt signing key
-    #   become: yes
-    #   ansible.builtin.apt_key:
-    #     keyserver: keyserver.ubuntu.com
-    #     id: 1A664B787094A482
-    #     state: present
-    # - name: add megasync apt repository
-    #   become: yes
-    #   ansible.builtin.apt_repository:
-    #     repo: "deb https://mega.nz/linux/repo/xUbuntu_21.10/ ./"
-    #     state: present
-    #     filename: megasync
-    #     update_cache: true
+    - name: placing megasync gpg file
+      become: yes
+      copy:
+        src: files/usr/share/keyrings/meganz-archive-keyring.gpg
+        dest: "/usr/share/keyrings/meganz-archive-keyring.gpg"
+        owner: "root"
+        group: "root"
+        mode: 0644
+    - name: placing megasync ppa list
+      become: yes
+      copy:
+        src: files/etc/apt/sources.list.d/megasync.list
+        dest: "/etc/apt/sources.list.d/megasync.list"
+        owner: "root"
+        group: "root"
+        mode: 0644
     - name: install apt packages
       become: yes
       apt:
         pkg:
-          # - megasync
-          # - nautilus-megasync
+          - megasync
+          - nautilus-megasync
           - openssh-server
           - git
           - ansible
