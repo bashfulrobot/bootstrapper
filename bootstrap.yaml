@@ -10,6 +10,7 @@
       changed_when: false
   tasks:
     - name: Add mega Apt signing key
+      become: yes
       ansible.builtin.apt_key:
         url: https://mega.nz/linux/repo/xUbuntu_21.10/Release.gpg
         state: present
