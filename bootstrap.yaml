@@ -15,19 +15,19 @@
     #     keyserver: keyserver.ubuntu.com
     #     id: 1A664B787094A482
     #     state: present
-    - name: add megasync apt repository
-      become: yes
-      ansible.builtin.apt_repository:
-        repo: "deb https://mega.nz/linux/repo/xUbuntu_21.10/ ./"
-        state: present
-        filename: megasync
-        update_cache: true
+    # - name: add megasync apt repository
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: "deb https://mega.nz/linux/repo/xUbuntu_21.10/ ./"
+    #     state: present
+    #     filename: megasync
+    #     update_cache: true
     - name: install apt packages
       become: yes
       apt:
         pkg:
-          - megasync
-          - nautilus-megasync
+          # - megasync
+          # - nautilus-megasync
           - openssh-server
           - git
           - ansible
