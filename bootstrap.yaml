@@ -12,7 +12,7 @@
     - name: Add mega Apt signing key
       become: yes
       ansible.builtin.apt_key:
-        url: https://mega.nz/linux/repo/xUbuntu_21.10/Release.gpg
+        id: 1A664B787094A482
         state: present
     - name: add megasync apt repository
       become: yes
