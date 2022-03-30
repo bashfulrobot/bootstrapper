@@ -9,12 +9,12 @@
       apt: update_cache=yes
       changed_when: false
   tasks:
-    - name: Add mega Apt signing key
-      become: yes
-      ansible.builtin.apt_key:
-        keyserver: keyserver.ubuntu.com
-        id: 1A664B787094A482
-        state: present
+    # - name: Add mega Apt signing key
+    #   become: yes
+    #   ansible.builtin.apt_key:
+    #     keyserver: keyserver.ubuntu.com
+    #     id: 1A664B787094A482
+    #     state: present
     - name: add megasync apt repository
       become: yes
       ansible.builtin.apt_repository:
