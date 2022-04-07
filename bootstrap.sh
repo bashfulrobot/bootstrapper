@@ -26,7 +26,7 @@ ${GIT} clone ${REPO_URL}
 cd ${REPO}
 
 # install ansible requirements
-${AG} install -r requirements.yaml --ignore-errors --force -p ./roles
+${AG} install -r requirements.yaml --ignore-errors --force
 # run the bootstrap
 ${AP} --ask-vault-pass bootstrap.yaml
 # cleanup

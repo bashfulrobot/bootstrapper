@@ -1,5 +1,5 @@
 roles:
-  - src: git+ssh://git@github.com/bashfulrobot/1password.git
+  - src: https://github.com/bashfulrobot/1password.git
     scm: git
     version: main
 collections:

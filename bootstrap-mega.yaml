@@ -1,0 +1,148 @@
+- name: bootstrap base system for automation
+  hosts: localhost
+  become: no
+  vars_files:
+    - secrets.yaml
+  pre_tasks:
+    - name: update repositories
+      become: yes
+      apt: update_cache=yes
+      changed_when: false
+  roles:
+    - 1password
+  tasks:
+    - name: placing megasync gpg file
+      become: yes
+      copy:
+        src: files/usr/share/keyrings/meganz-archive-keyring.gpg
+        dest: "/usr/share/keyrings/meganz-archive-keyring.gpg"
+        owner: "root"
+        group: "root"
+        mode: 0644
+    - name: placing megasync ppa list
+      become: yes
+      copy:
+        src: files/etc/apt/sources.list.d/megasync.list
+        dest: "/etc/apt/sources.list.d/megasync.list"
+        owner: "root"
+        group: "root"
+        mode: 0644
+    - name: install apt packages
+      become: yes
+      apt:
+        pkg:
+          - megasync
+          - nautilus-megasync
+          - openssh-server
+          - git
+          - ansible
+          - gpg
+          - snapd
+          - make
+        state: present
+    - name: configure git - user email
+      git_config:
+        name: user.email
+        scope: global
+        value: "{{ my_email }}"
+    - name: configure git - name
+      git_config:
+        name: user.name
+        scope: global
+        value: "{{ my_fullname }}"
+    - name: configure git - username
+      git_config:
+        name: user.username
+        scope: global
+        value: "{{ my_github_username }}"
+    - name: configure git - user signing key
+      git_config:
+        name: user.signingKey
+        scope: global
+        value: "{{ my_git_signkey }}"
+    - name: set git config - always sign gpg
+      git_config:
+        name: commit.gpgsign
+        scope: global
+        value: "true"
+    - name: setup system folders if they do not exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0700"
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+      with_items:
+        - "/home/{{ lookup('env','USER') }}/.aws"
+        - "/home/{{ lookup('env','USER') }}/.local/share/cod"
+        - "/home/{{ lookup('env','USER') }}/.password-store"
+        - "/home/{{ lookup('env','USER') }}/.restic"
+        - "/home/{{ lookup('env','USER') }}/.themes"
+        - "/home/{{ lookup('env','USER') }}/.config/autostart"
+        - "/home/{{ lookup('env','USER') }}/.config/espanso"
+        - "/home/{{ lookup('env','USER') }}/.config/ansible-automation"
+        - "/home/{{ lookup('env','USER') }}/tmp/bs"
+        - "/home/{{ lookup('env','USER') }}/.icons"
+        - "/home/{{ lookup('env','USER') }}/.fonts"
+        - "/home/{{ lookup('env','USER') }}/.ssh"
+        - "/home/{{ lookup('env','USER') }}/.kube"
+        - "/home/{{ lookup('env','USER') }}/.gnupg"
+        - "/home/{{ lookup('env','USER') }}/Documents"
+        - "/home/{{ lookup('env','USER') }}/Pictures"
+        - "/home/{{ lookup('env','USER') }}/go/src/github.com/{{ my_github_username }}"
+        - "/home/{{ lookup('env','USER') }}/Videos"
+        - "/home/{{ lookup('env','USER') }}/Desktop"
+        - "/home/{{ lookup('env','USER') }}/.bazaar"
+        - "/home/{{ lookup('env','USER') }}/seafile-client"
+        - "/home/{{ lookup('env','USER') }}/.config/autostart"
+        - "/home/{{ lookup('env','USER') }}/code"
+    - name: placing megasync autostart
+      copy:
+        src: files/home/.config/autostart/megasync.desktop
+        dest: "/home/{{ lookup('env','USER') }}/.config/autostart/megasync.desktop"
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+        mode: 0644
+    - name: adding system user
+      become: yes
+      user:
+        name: "{{ lookup('env','USER') }}"
+        comment: "{{ my_fullname }}"
+        groups: sudo, adm, cdrom, dip, plugdev, lpadmin, sambashare, audio
+        append: yes
+    - name: install gh ssh pub keys
+      authorized_key:
+        user: "{{ lookup('env','USER') }}"
+        state: present
+        key: "https://github.com/{{ item }}.keys"
+      with_items:
+        - "{{ my_github_username }}"
+    - name: allow ssh in ufw
+      become: yes
+      ufw:
+        rule: allow
+        name: OpenSSH
+    - name: enable and start system scoped services
+      become: yes
+      systemd:
+        enabled: yes
+        state: started
+        name: "{{ item }}"
+      with_items:
+        - ssh
+        - ufw
+    - name: set timezone to america/vancouver
+      timezone:
+        name: America/Vancouver
+    # - name: fix ssh key permissions
+    #   file:
+    #     path: "{{ item }}"
+    #     state: file
+    #     mode: "0600"
+    #     owner: "{{ lookup('env','USER') }}"
+    #     group: "{{ lookup('env','USER') }}"
+    #   with_items:
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa"
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/id_rsa.pub"
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform"
+    #     - "/home/{{ lookup('env','USER') }}/.ssh/service_terraform.pub"
