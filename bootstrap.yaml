@@ -8,6 +8,8 @@
       become: yes
       apt: update_cache=yes
       changed_when: false
+  roles:
+    - 1password
   tasks:
     - name: placing megasync gpg file
       become: yes
@@ -63,7 +65,7 @@
         name: commit.gpgsign
         scope: global
         value: "true"
-    - name: setup seafile folders if they do not exist
+    - name: setup system folders if they do not exist
       file:
         path: "{{ item }}"
         state: directory
