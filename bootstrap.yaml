@@ -198,7 +198,7 @@
         creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-gnupg"
     - name: setup kube sync
       shell: |
-        /usr/bin/seaf-cli sync -l "8730d68f-2564-406c-9b1f-6b54f9fa3293" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.kube" -u "{{ seaf_id}}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}
+        /usr/bin/seaf-cli sync -l "8730d68f-2564-406c-9b1f-6b54f9fa3293" -s "{{ seaf_server }}" -d "/home/{{ lookup('env','USER') }}/.kube" -u "{{ seaf_id}}" -p "{{ seaf_pass }}" -e "{{ seaf_lib_pass }}"
         touch "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-kube"
       args:
         creates: "/home/{{ lookup('env','USER') }}/.config/ansible-automation/seaf-cli-kube"
