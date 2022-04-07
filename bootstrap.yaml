@@ -83,6 +83,7 @@
         - "/home/{{ lookup('env','USER') }}/.icons"
         - "/home/{{ lookup('env','USER') }}/.fonts"
         - "/home/{{ lookup('env','USER') }}/.ssh"
+        - "/home/{{ lookup('env','USER') }}/.kube"
         - "/home/{{ lookup('env','USER') }}/.gnupg"
         - "/home/{{ lookup('env','USER') }}/Documents"
         - "/home/{{ lookup('env','USER') }}/Pictures"
@@ -92,6 +93,7 @@
         - "/home/{{ lookup('env','USER') }}/.bazaar"
         - "/home/{{ lookup('env','USER') }}/seafile-client"
         - "/home/{{ lookup('env','USER') }}/.config/autostart"
+        - "/home/{{ lookup('env','USER') }}/code"
     - name: placing megasync autostart
       copy:
         src: files/home/.config/autostart/megasync.desktop
