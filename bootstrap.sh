@@ -7,6 +7,7 @@ SUDO="$(which sudo)"
 APT="$(which apt)"
 GIT="$(which git)"
 AP="$(which ansible-playbook)"
+AG="$(which ansible-galaxy)"
 RM="$(which rm)"
 
 # locations
@@ -24,6 +25,8 @@ cd ${WORKING}
 ${GIT} clone ${REPO_URL}
 cd ${REPO}
 
+# install ansible requirements
+${AG} install -r requirements.yaml --ignore-errors --force -p ./roles
 # run the bootstrap
 ${AP} --ask-vault-pass bootstrap.yaml
 # cleanup
