@@ -20,7 +20,7 @@
           - git
           - ansible
           - gpg
-          - snapd
+#          - snapd
           - make
         state: present
     - name: configure git - user email
