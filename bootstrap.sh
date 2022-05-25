@@ -9,6 +9,8 @@ GIT="$(which git)"
 AP="$(which ansible-playbook)"
 AG="$(which ansible-galaxy)"
 RM="$(which rm)"
+PY="$(which python3)"
+PIP="$(which pip3)"
 
 # locations
 WORKING="/tmp"
@@ -19,7 +21,7 @@ REPO_URL="https://github.com/bashfulrobot/bootstrapper.git"
 
 # install dependencies
 ${SUDO} ${APT} install python3-pip git -y
-sudo python -m pip install ansible
+${SUDO} ${PY} -m ${PIP} install ansible
 
 # throwaway location
 cd ${WORKING}
