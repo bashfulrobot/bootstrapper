@@ -1,6 +1,6 @@
-roles:
-  - src: https://github.com/bashfulrobot/1password.git
-    scm: git
-    version: main
+# roles:
+#   - src: https://github.com/bashfulrobot/1password.git
+#     scm: git
+#     version: main
 collections:
   - name: community.general
