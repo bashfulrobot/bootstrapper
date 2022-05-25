@@ -8,8 +8,8 @@
       become: yes
       apt: update_cache=yes
       changed_when: false
-  roles:
-    - 1password
+  # roles:
+  #   - 1password
   tasks:
     - name: install apt packages
       become: yes
