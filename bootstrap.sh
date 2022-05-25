@@ -18,7 +18,8 @@ REPO_URL="https://github.com/bashfulrobot/bootstrapper.git"
 # # # # # MAIN
 
 # install dependencies
-${SUDO} ${APT} install ansible git -y
+${SUDO} ${APT} install python3-pip git -y
+sudo python -m pip install ansible
 
 # throwaway location
 cd ${WORKING}
